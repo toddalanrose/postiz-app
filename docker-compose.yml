@@ -8,57 +8,25 @@ services:
       FRONTEND_URL: "https://postiz.alphasync.ai"
       NEXT_PUBLIC_BACKEND_URL: "https://postiz.alphasync.ai/api"
       JWT_SECRET: "kj34h5kjh23k4jh5k23jh4k5jh23k4jh5k2j3h4k5jh23k4jh5"
-      DATABASE_URL: "postgresql://postiz-user:postiz-password@postiz-postgres:5432/postiz-db-local"
-      REDIS_URL: "redis://postiz-redis:6379"
+      DATABASE_URL: "postgresql://postiz-user:postiz-password@localhost:5432/postiz-db"
+      REDIS_URL: "redis://localhost:6379"
       BACKEND_INTERNAL_URL: "http://localhost:3000"
       IS_GENERAL: "true"
       DISABLE_REGISTRATION: "false"
       STORAGE_PROVIDER: "local"
       UPLOAD_DIRECTORY: "/uploads"
       NEXT_PUBLIC_UPLOAD_DIRECTORY: "/uploads"
+      POSTGRES_PASSWORD: "postiz-password"
+      POSTGRES_USER: "postiz-user"
+      POSTGRES_DB: "postiz-db"
     volumes:
-      - postiz-config:/config/
+      - postiz-data:/config/
       - postiz-uploads:/uploads/
     ports:
       - 5000:5000
-    networks:
-      - postiz-network
-    depends_on:
-      - postiz-postgres
-      - postiz-redis
-
-  postiz-postgres:
-    image: postgres:17-alpine
-    container_name: postiz-postgres
-    restart: always
-    environment:
-      POSTGRES_PASSWORD: postiz-password
-      POSTGRES_USER: postiz-user
-      POSTGRES_DB: postiz-db-local
-    volumes:
-      - postgres-volume:/var/lib/postgresql/data
-    networks:
-      - postiz-network
-
-  postiz-redis:
-    image: redis:7.2
-    container_name: postiz-redis
-    restart: always
-    volumes:
-      - postiz-redis-data:/data
-    networks:
-      - postiz-network
 
 volumes:
-  postgres-volume:
-    external: false
-  postiz-redis-data:
-    external: false
-  postiz-config:
+  postiz-data:
     external: false
   postiz-uploads:
-    external: false
-
-networks:
-  postiz-network:
     external: false
